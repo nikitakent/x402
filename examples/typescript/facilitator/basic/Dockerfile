@@ -4,16 +4,18 @@ RUN npm install -g pnpm
 
 WORKDIR /app
 
-# Copy monorepo root files needed for workspace
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY typescript/packages ./typescript/packages
-COPY examples/typescript/facilitator/basic ./facilitator
+# Copy everything from repo root
+COPY . .
 
-WORKDIR /facilitator
-
+# Install and build the typescript packages first
+WORKDIR /app/typescript
 RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
+# Now run the facilitator
+WORKDIR /app/examples/typescript/facilitator/basic
+RUN pnpm install
+
 EXPOSE 4022
 
-CMD ["node", "index.js"]
+CMD ["node", "index.ts"]
