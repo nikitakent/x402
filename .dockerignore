@@ -1,0 +1,10 @@
+**/node_modules
+**/.git
+**/dist
+go
+java
+python
+specs
+docs
+e2e
+contracts
