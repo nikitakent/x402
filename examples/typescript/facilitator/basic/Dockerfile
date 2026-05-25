@@ -6,13 +6,13 @@ WORKDIR /app
 
 COPY . .
 
-WORKDIR /app/typescript
+# Install and build everything from the monorepo root
 RUN pnpm install
-RUN pnpm build
+RUN pnpm --filter "@x402/core" build
+RUN pnpm --filter "@x402/evm" build
 
 WORKDIR /app/examples/typescript/facilitator/basic
-RUN pnpm install
 
 EXPOSE 4022
 
-CMD ["node", "index.ts"]
+CMD ["node_modules/.bin/tsx", "index.ts"]
