@@ -16,7 +16,7 @@ import dotenv from "dotenv";
 import express from "express";
 import { createWalletClient, http, publicActions } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { baseSepolia } from "viem/chains";
+import { mizuhikiTestnetAwaji } from "viem/chains";
 
 dotenv.config();
 
@@ -29,10 +29,10 @@ if (!process.env.EVM_PRIVATE_KEY) {
   process.exit(1);
 }
 
-if (!process.env.SVM_PRIVATE_KEY) {
-  console.error("❌ SVM_PRIVATE_KEY environment variable is required");
-  process.exit(1);
-}
+// if (!process.env.SVM_PRIVATE_KEY) {
+//   console.error("❌ SVM_PRIVATE_KEY environment variable is required");
+//   process.exit(1);
+// }
 
 // Initialize the EVM account from private key
 const evmAccount = privateKeyToAccount(
@@ -41,15 +41,15 @@ const evmAccount = privateKeyToAccount(
 console.info(`EVM Facilitator account: ${evmAccount.address}`);
 
 // Initialize the SVM account from private key
-const svmAccount = await createKeyPairSignerFromBytes(
-  base58.decode(process.env.SVM_PRIVATE_KEY as string),
-);
-console.info(`SVM Facilitator account: ${svmAccount.address}`);
+// const svmAccount = await createKeyPairSignerFromBytes(
+//   base58.decode(process.env.SVM_PRIVATE_KEY as string),
+// );
+// console.info(`SVM Facilitator account: ${svmAccount.address}`);
 
 // Create a Viem client with both wallet and public capabilities
 const viemClient = createWalletClient({
   account: evmAccount,
-  chain: baseSepolia,
+  chain: mizuhikiTestnetAwaji,
   transport: http(),
 }).extend(publicActions);
 
@@ -94,7 +94,7 @@ const evmSigner = toFacilitatorEvmSigner({
 });
 
 // Facilitator can now handle all Solana networks with automatic RPC creation
-const svmSigner = toFacilitatorSvmSigner(svmAccount);
+// const svmSigner = toFacilitatorSvmSigner(svmAccount);
 
 const facilitator = new x402Facilitator()
   .onBeforeVerify(async (context) => {
@@ -118,14 +118,14 @@ const facilitator = new x402Facilitator()
 
 // Register EVM and SVM schemes
 facilitator.register(
-  "eip155:84532",
+  "eip155:6497",
   new ExactEvmScheme(evmSigner, { deployERC4337WithEIP6492: true }),
 ); // Base Sepolia
-facilitator.register("eip155:84532", new UptoEvmScheme(evmSigner));
-facilitator.register(
-  "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
-  new ExactSvmScheme(svmSigner),
-); // Devnet
+facilitator.register("eip155:6497", new UptoEvmScheme(evmSigner));
+// facilitator.register(
+//   "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+//   new ExactSvmScheme(svmSigner),
+// ); // Devnet
 
 // Initialize Express app
 const app = express();

@@ -88,7 +88,7 @@ Request:
     "accepted": {
       "scheme": "exact",
       "network": "eip155:84532",
-      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "asset": "0xb9C49B527294E8472eD48B800E81b5FA69D0f72E",
       "amount": "1000",
       "payTo": "0x...",
       "maxTimeoutSeconds": 300,
@@ -105,7 +105,7 @@ Request:
   "paymentRequirements": {
     "scheme": "exact",
     "network": "eip155:84532",
-    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "asset": "0xb9C49B527294E8472eD48B800E81b5FA69D0f72E",
     "amount": "1000",
     "payTo": "0x...",
     "maxTimeoutSeconds": 300,
